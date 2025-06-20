@@ -20,3 +20,13 @@ const bookSchema = new mongoose.Schema({
   genre: String,
 });
 
+const Book = mongoose.model('Book', bookSchema);
+app.get('/books', async (req, res) => {
+  try {
+    const books = await Book.find({});  
+    res.json(books);                    
+  } catch (error) {
+    res.status(500).json({ error: error.message });  
+  }
+});
+
