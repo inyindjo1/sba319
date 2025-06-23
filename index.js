@@ -8,10 +8,8 @@ app.use(express.json());
 const PORT = process.env.PORT || 3000;
 const MONGO_URI = process.env.MONGO_URI || process.env.url;
 
-
 await mongoose.connect(MONGO_URI);
 console.log('MongoDB Connected');
-
 
 const bookSchema = new mongoose.Schema({
   title: { type: String, required: true },
@@ -21,7 +19,6 @@ const bookSchema = new mongoose.Schema({
   genre: String,
 });
 
-
 bookSchema.index({ title: 1 });
 
 const Book = mongoose.model('Book', bookSchema);
@@ -29,7 +26,6 @@ const Book = mongoose.model('Book', bookSchema);
 app.get('/', (req, res) => {
   res.send('Welcome to the Book API');
 });
-
 
 app.get('/books', async (req, res) => {
   try {
@@ -39,7 +35,6 @@ app.get('/books', async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
-
 
 app.get('/books/:id', async (req, res) => {
   try {
@@ -54,14 +49,8 @@ app.get('/books/:id', async (req, res) => {
 app.post('/books', async (req, res) => {
   try {
     
-    if (!req.body.title) {
-      req.body = {
-        title: 'The Great Gatsby',
-        author: 'F. Scott Fitzgerald',
-        publishedYear: 1925,
-        pages: 218,
-        genre: 'Novel',
-      };
+    if (req.body._id) {
+      delete req.body._id;
     }
 
     const newBook = new Book(req.body);
@@ -71,7 +60,6 @@ app.post('/books', async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 });
-
 
 app.put('/books/:id', async (req, res) => {
   try {
@@ -86,6 +74,7 @@ app.put('/books/:id', async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 });
+
 app.delete('/books/:id', async (req, res) => {
   try {
     const deletedBook = await Book.findByIdAndDelete(req.params.id);
