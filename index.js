@@ -45,16 +45,10 @@ app.get('/books/:id', async (req, res) => {
 
 app.post('/books', async (req, res) => {
   try {
+    
     if (!req.body.title) {
-      req.body = {
-        title: 'To Kill a Mockingbird',
-        author: 'Harper Lee',
-        publishedYear: 1960,
-        pages: 281,
-        genre: 'Fiction',
-      }
+      return res.status(400).json({ error: 'Book title is required.' });
     }
-
     const newBook = new Book(req.body)
     const savedBook = await newBook.save()
     res.status(201).json(savedBook)
@@ -89,7 +83,6 @@ app.delete('/books/:id', async (req, res) => {
   }
 })
 
-app.listen(3000, () => {
-  console.log("Listening on port: 3000");
-});
-
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`)
+})
