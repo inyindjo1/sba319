@@ -70,3 +70,15 @@ app.delete('/books/:id', async (req, res) => {
     res.status(400).json({ error: 'Invalid book ID' });
   }
 });
+app.get('/users', async (req, res) => {
+  try {
+    const users = await User.find({});
+    res.json(users);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
