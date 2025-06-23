@@ -30,3 +30,12 @@ app.get('/books', async (req, res) => {
   }
 });
 
+app.get('/books/:id', async (req, res) => {
+  try {
+    const book = await Book.findById(req.params.id);
+    if (!book) return res.status(404).json({ message: 'Book not found ' });
+    res.json(book);
+  } catch (error) {
+    res.status(400).json({ error: 'Invalid book ID' });
+  }
+});
