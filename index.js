@@ -78,6 +78,17 @@ app.get('/users', async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+app.get('/comments', async (req, res) => {
+  try {
+    const comments = await Comment.find({})
+      .populate('userId', 'username name')      
+      .populate('bookId', 'title author');      
+    res.json(comments);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
