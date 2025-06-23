@@ -48,3 +48,16 @@ app.post('/books', async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 });
+app.put('/books/:id', async (req, res) => {
+  try {
+    const updatedBook = await Book.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true, runValidators: true }
+    );
+    if (!updatedBook) return res.status(404).json({ message: 'Book not found' });
+    res.json(updatedBook);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+});
